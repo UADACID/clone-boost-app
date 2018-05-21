@@ -7,6 +7,7 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  Platform,
   TouchableOpacity,
 } from 'react-native';
 
@@ -15,10 +16,44 @@ const TAB_BOST_POSITION = (width / 2) - 32;
 const WIDTH_ITEM = ((width / 2) - 32) / 2 ;
 
 export default class CustomTabBar extends Component {
+
+  customActionHome = ({routeName, fromRouteName, params}) => {
+      if (fromRouteName === 'Home' || fromRouteName === '' && params && params.refScrollView) {
+        params.refScrollViewHome.scrollToPosition(0,0)
+      }
+    this.props.navigation.navigate(routeName)
+  }
+
+  customAction = ({routeName, params}) => {
+    this.props.navigation.navigate(routeName)
+  }
+
+  onPressTab = ({routeName, params}) => {
+      this.props.navigation.setParams({ routeName})
+      const fromRouteName = this.props.navigation.getParam('routeName', '');
+      switch (routeName) {
+        case 'Home':
+          this.customActionHome({routeName, fromRouteName, params})
+          break;
+        case 'BoostSpot':
+          this.customAction({routeName, params})
+          break;
+        case 'BoostQRScan':
+          this.customAction({routeName, params})
+          break;
+        case 'MyDeals':
+          this.customAction({routeName, params})
+          break;
+        case 'Account':
+          this.customAction({routeName, params})
+          break;
+        default:
+      }
+  }
+
   render() {
     const { navigation } = this.props;
     const { routes, index } = navigation.state;
-
     return (
       <View style={styles.container}>
         {
@@ -45,7 +80,8 @@ export default class CustomTabBar extends Component {
               return (
                 <TouchableOpacity
                   key={indexItem}
-                  onPress={() => {navigation.navigate(route.routeName)}}>
+                  activeOpacity={1}
+                  onPress={()=>this.onPressTab({routeName:route.routeName, params:null})}>
                   <View style={{width: 64, height: 64, justifyContent: 'flex-end'}}>
                     <View style={styles.item}>
                     </View>
@@ -59,8 +95,9 @@ export default class CustomTabBar extends Component {
             return (
               <TouchableOpacity
                 key={indexItem}
+                activeOpacity={1}
                 style={styles.item}
-                onPress={() => {navigation.navigate(route.routeName)}}>
+                onPress={()=>this.onPressTab({routeName:route.routeName, params:route.params})}>
                 <Image
                   style={{width: 24, height: 24}}
                   resizeMode='contain'
@@ -79,8 +116,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     width,
-    height: 64,
-    alignItems: 'flex-end'
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: Platform.OS == 'ios' ? 55 : 64,
+    alignItems: 'flex-end',
   },
   item: {
     width: WIDTH_ITEM,
@@ -89,5 +129,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#d0d0d0',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fafafa'
   }
 });

@@ -10,12 +10,15 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { withNavigation } from 'react-navigation';
+
 import Coupon from './coupon';
 
 const { height, width } = Dimensions.get('window');
 
-export default class BoostHeader extends Component {
+class BoostHeaderDashboard extends Component {
   render() {
+    const routeName = this.props.navigation.getParam('routeName', '');
     return (
       <View>
         <CustomStatusBar />
@@ -36,11 +39,13 @@ export default class BoostHeader extends Component {
               source={require('../assets/logo.png')}/>
           </View>
           <View style={[styles.containerItem,{flexDirection: 'row', justifyContent: 'flex-end'}]}>
-            {this.props.hasMap ?
-              <Image
-                resizeMode='contain'
-                style={{width: 24, height: 24}}
-                source={require('../assets/map_icon_white.png')}/>
+            {routeName == 'BoostSpot' ?
+              <TouchableOpacity style={{paddingRight: 10, paddingLeft:10}}>
+                <Image
+                  resizeMode='contain'
+                  style={{width: 24, height: 24}}
+                  source={require('../assets/map_icon_white.png')}/>
+              </TouchableOpacity>
             : null}
             <TouchableOpacity style={{paddingRight: 10}}>
               <Image
@@ -64,6 +69,8 @@ const CustomStatusBar = () => {
     </View>
   )
 }
+
+export default withNavigation(BoostHeaderDashboard);
 
 const styles = StyleSheet.create({
   container: {

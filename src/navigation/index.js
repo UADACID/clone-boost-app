@@ -7,6 +7,9 @@ import Otp from '../modules/otp/screen'
 import RefFriend from '../modules/refFriend/screen'
 import OtpValidation from '../modules/otpValidation/screen'
 
+//CHILD SCREEN
+import BoostSpotSearch from '../modules/boostSpot/boostSpotSearch'
+
 //TAB DASHBOARD'S SCREEN
 import Home from '../modules/home/screen'
 import BoostSpot from '../modules/boostSpot/screen'
@@ -15,7 +18,7 @@ import MyDeals from '../modules/myDeals/screen'
 import Account from '../modules/account/screen'
 
 //CUSTOM COMPONENT
-import BoostHeader from '../components/boostHeader';
+import BoostHeaderDashboard from '../components/boostHeaderDashboard';
 import CustomTabBar from '../components/customTabBar';
 
 const TabDasboard = createBottomTabNavigator({
@@ -35,7 +38,10 @@ const TabDasboard = createBottomTabNavigator({
         screen : Account
     },
 },{
-  tabBarComponent: CustomTabBar
+  tabBarComponent: CustomTabBar,
+  tabBarOptions: {
+    // backgroundColor: 'transparent'
+  }
 })
 
 export default createStackNavigator({
@@ -54,10 +60,13 @@ export default createStackNavigator({
     Dashboard : {
         screen : TabDasboard,
         navigationOptions : {
-          header : () => <BoostHeader />
+          header : () => <BoostHeaderDashboard />
         }
     },
+    BoostSpotSearch: {
+      screen : BoostSpotSearch,
+    }
   },{
       headerMode : 'float',
-      initialRouteName: 'OtpValidation'
+      // initialRouteName: 'Dashboard'
   });
